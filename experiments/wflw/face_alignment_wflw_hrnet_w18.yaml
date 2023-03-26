@@ -5,8 +5,8 @@ PRINT_FREQ: 50
 DATASET:
   DATASET: WFLW
   ROOT: './data/wflw/images/'
-  TRAINSET: './data/wflw/trainaugmentF.csv'
-  TESTSET: './data/wflw/testCepahlo.csv'
+  TRAINSET: './data/wflw/TraindataAug.csv'
+  TESTSET: './data/wflw/Test2Data.csv'
   FLIP: true
   SCALE_FACTOR: 0.25
   ROT_FACTOR: 30
