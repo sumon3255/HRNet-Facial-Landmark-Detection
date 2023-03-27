@@ -14,7 +14,7 @@ from yacs.config import CfgNode as CN
 
 _C = CN()
 
-_C.OUTPUT_DIR = '/content/gdrive/MyDrive/HrnetData/Results/Augment2(0,1)'
+_C.OUTPUT_DIR = 'output'
 _C.LOG_DIR = 'log'
 _C.GPUS = (0, 1, 2, 4)
 _C.WORKERS = 16
