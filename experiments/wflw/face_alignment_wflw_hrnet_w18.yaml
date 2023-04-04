@@ -5,14 +5,14 @@ PRINT_FREQ: 50
 DATASET:
   DATASET: WFLW
   ROOT: './data/wflw/images/'
-  TRAINSET: './data/wflw/patch_0_train.csvv'
-  TESTSET: './data/wflw/patch_0_test2.csv'
+  TRAINSET: './data/wflw/patch_2_train.csvv'
+  TESTSET: './data/wflw/patch_2_test2.csv'
   FLIP: true
   SCALE_FACTOR: 0.25
   ROT_FACTOR: 30
 MODEL:
   NAME: 'hrnet'
-  NUM_JOINTS: 19
+  NUM_JOINTS: 1
   INIT_WEIGHTS: true
   PRETRAINED: 'hrnetv2_pretrained/hrnetv2_w18_imagenet_pretrained.pth'
   SIGMA: 1.5
