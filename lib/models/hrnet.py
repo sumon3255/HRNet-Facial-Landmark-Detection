@@ -318,10 +318,13 @@ class HighResolutionNet(nn.Module):
                 stride=1,
                 padding=1 if extra.FINAL_CONV_KERNEL == 3 else 0)
         )
+        in_features = 38
+        hidden_size = 100
+        out_features =
         self.mlp = nn.Sequential(
             nn.Linear(in_features, hidden_size),
             nn.ReLU(),
-            nn.Linear(hidden_size, out_features),
+            nn.Linear(hidden_size, 1),
             nn.ReLU()
         )
 
