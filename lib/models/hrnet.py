@@ -318,6 +318,12 @@ class HighResolutionNet(nn.Module):
                 stride=1,
                 padding=1 if extra.FINAL_CONV_KERNEL == 3 else 0)
         )
+        self.mlp = nn.Sequential(
+            nn.Linear(in_features, hidden_size),
+            nn.ReLU(),
+            nn.Linear(hidden_size, out_features),
+            nn.ReLU()
+        )
 
     def _make_transition_layer(
             self, num_channels_pre_layer, num_channels_cur_layer):
@@ -410,6 +416,7 @@ class HighResolutionNet(nn.Module):
         x = self.bn2(x)
         x = self.relu(x)
         x = self.layer1(x)
+        x = self.mlp(x)
 
         x_list = []
         for i in range(self.stage2_cfg['NUM_BRANCHES']):
