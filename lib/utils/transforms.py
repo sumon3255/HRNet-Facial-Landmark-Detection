@@ -9,8 +9,7 @@ import torch
 import scipy
 import scipy.misc
 import numpy as np
-from PIL import Image 
-import skimage
+
 
 MATCHED_PARTS = {
     "300W": ([1, 17], [2, 16], [3, 15], [4, 14], [5, 13], [6, 12], [7, 11], [8, 10],
@@ -23,7 +22,13 @@ MATCHED_PARTS = {
              [13, 15],
              [16, 18]),
     "COFW": ([1, 2], [5, 7], [3, 4], [6, 8], [9, 10], [11, 12], [13, 15], [17, 18], [14, 16], [19, 20], [23, 24]),
-    "WFLW": ()}
+    "WFLW": ([0, 32],  [1,  31], [2,  30], [3,  29], [4,  28], [5, 27], [6, 26], [7, 25], [8, 24], [9, 23], [10, 22],
+             [11, 21], [12, 20], [13, 19], [14, 18], [15, 17],  # check
+             [33, 46], [34, 45], [35, 44], [36, 43], [37, 42], [38, 50], [39, 49], [40, 48], [41, 47],  # elbrow
+             [60, 72], [61, 71], [62, 70], [63, 69], [64, 68], [65, 75], [66, 74], [67, 73],
+             [55, 59], [56, 58],
+             [76, 82], [77, 81], [78, 80], [87, 83], [86, 84],
+             [88, 92], [89, 91], [95, 93], [96, 97])}
 
 
 def fliplr_joints(x, width, dataset='aflw'):
@@ -202,12 +207,9 @@ def crop(img, center, scale, output_size, rot=0):
 
     if not rot == 0:
         # Remove padding
-        # new_img = scipy.misc.imrotate(new_img, rot)
-        new_img = skimage.transform.rotate(new_img, rot )
+        new_img = scipy.misc.imrotate(new_img, rot)
         new_img = new_img[pad:-pad, pad:-pad]
-    # new_img = scipy.misc.imresize(new_img, output_size) # numpy.array(Image.fromarray(arr).resize())
-    # print(output_size)
-    new_img = np.resize(new_img,(output_size[0],output_size[1],3))
+    new_img = scipy.misc.imresize(new_img, output_size)
     return new_img
 
 
@@ -241,7 +243,6 @@ def generate_target(img, pt, sigma, label_type='Gaussian'):
 
     img[img_y[0]:img_y[1], img_x[0]:img_x[1]] = g[g_y[0]:g_y[1], g_x[0]:g_x[1]]
     return img
-
 
 
 
