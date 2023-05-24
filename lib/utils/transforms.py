@@ -7,7 +7,8 @@
 import cv2
 import torch
 import scipy
-import scipy.misc
+from scipy import ndimage
+from skimage import transform
 import numpy as np
 
 
@@ -162,14 +163,14 @@ def crop(img, center, scale, output_size, rot=0):
     if sf < 2:
         sf = 1
     else:
-        new_size = int(np.math.floor(max(ht, wd) / sf))
-        new_ht = int(np.math.floor(ht / sf))
-        new_wd = int(np.math.floor(wd / sf))
+        new_size = int(np.floor(max(ht, wd) / sf))
+        new_ht = int(np.floor(ht / sf))
+        new_wd = int(np.floor(wd / sf))
         if new_size < 2:
-            return torch.zeros(output_size[0], output_size[1], img.shape[2]) \
-                        if len(img.shape) > 2 else torch.zeros(output_size[0], output_size[1])
+            return np.zeros((output_size[0], output_size[1], img.shape[2]), dtype=np.float32) \
+                        if len(img.shape) > 2 else np.zeros((output_size[0], output_size[1]), dtype=np.float32)
         else:
-            img = scipy.misc.imresize(img, [new_ht, new_wd])  # (0-1)-->(0-255)
+            img = transform.resize(img, (new_ht, new_wd))  # (0-1) --> (0-255)
             center_new[0] = center_new[0] * 1.0 / sf
             center_new[1] = center_new[1] * 1.0 / sf
             scale = scale / sf
@@ -201,10 +202,15 @@ def crop(img, center, scale, output_size, rot=0):
 
     if not rot == 0:
         # Remove padding
-        new_img = scipy.misc.imrotate(new_img, rot)
+        new_img = transform.rotate(new_img, rot)
         new_img = new_img[pad:-pad, pad:-pad]
-    new_img = scipy.misc.imresize(new_img, output_size)
+    new_img = transform.resize(new_img, output_size)
     return new_img
+
+
+
+
+
 
 
 def generate_target(img, pt, sigma, label_type='Gaussian'):
