@@ -18,7 +18,7 @@ _pair = _ntuple(2)
 
 
 class SelfONNLayer(nn.Module):
-    def __init__(self,in_channels,out_channels,kernel_size,stride=1,padding=0,dilation=1,groups=1,bias=True,q=1,mode='fast',dropout=None):
+    def __init__(self,in_channels,out_channels,kernel_size,stride=1,padding=0,dilation=1,groups=1,bias=True,q=3,mode='fast',dropout=None):
         super().__init__()
         self.in_channels = in_channels
         self.out_channels = out_channels
