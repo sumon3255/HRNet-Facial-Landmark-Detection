@@ -15,7 +15,7 @@ import logging
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
+from .selfonn import SelfONNLayer
 
 BatchNorm2d = nn.BatchNorm2d
 BN_MOMENTUM = 0.01
@@ -65,16 +65,11 @@ class Bottleneck(nn.Module):
 
     def __init__(self, inplanes, planes, stride=1, downsample=None):
         super(Bottleneck, self).__init__()
-        self.conv1 = nn.Conv2d(inplanes, planes, kernel_size=1, bias=False)
+        self.conv1 = SelfONNLayer(inplanes, planes, kernel_size=1, bias=False,dropout=0.2)
         self.bn1 = BatchNorm2d(planes, momentum=BN_MOMENTUM)
-        self.conv2 = nn.Conv2d(planes, planes, kernel_size=3, stride=stride,
-                               padding=1, bias=False)
-        self.bn2 = BatchNorm2d(planes, momentum=BN_MOMENTUM)
-        self.conv3 = nn.Conv2d(planes, planes * self.expansion, kernel_size=1,
-                               bias=False)
-        self.bn3 = BatchNorm2d(planes * self.expansion,
-                               momentum=BN_MOMENTUM)
-        self.relu = nn.ReLU(inplace=True)
+        self.conv3 = SelfONNLayer(planes, planes * self.expansion, kernel_size=1, bias=False,dropout=0.2)
+        self.bn3 = BatchNorm2d(planes * self.expansion, momentum=BN_MOMENTUM)
+        self.relu = nn.Tanh()
         self.downsample = downsample
         self.stride = stride
 
@@ -83,10 +78,6 @@ class Bottleneck(nn.Module):
 
         out = self.conv1(x)
         out = self.bn1(out)
-        out = self.relu(out)
-
-        out = self.conv2(out)
-        out = self.bn2(out)
         out = self.relu(out)
 
         out = self.conv3(out)
